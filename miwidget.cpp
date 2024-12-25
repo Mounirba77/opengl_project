@@ -1,7 +1,8 @@
-#include "miWidget.h"
-#include <QOpenGLFunctions>
-#include <QPainter>
+#include "miWidget.h"  // Inclusion du fichier d'en-tête de la classe miWidget
+#include <QOpenGLFunctions>  // Inclusion des fonctions OpenGL
+#include <QPainter>  // Inclusion pour l'utilisation de QPainter
 
+// Constructeur de la classe miWidget
 miWidget::miWidget(QWidget *parent) : QOpenGLWidget(parent), translationX(0), translationY(0), translationZ(0),
     scaleX(1.0), scaleY(1.0), scaleZ(1.0) // Initialiser les valeurs d'échelle par défaut
 {
@@ -10,23 +11,23 @@ miWidget::miWidget(QWidget *parent) : QOpenGLWidget(parent), translationX(0), tr
 
 void miWidget::initializeGL()
 {
-    initializeOpenGLFunctions();
-    glEnable(GL_DEPTH_TEST);  // Activer le test de profondeur
+    initializeOpenGLFunctions();  // Initialiser les fonctions OpenGL
+    glEnable(GL_DEPTH_TEST);  // Activer le test de profondeur pour gérer le rendu 3D correctement
 }
 
 void miWidget::resizeGL(int w, int h)
 {
-    glViewport(0, 0, w, h);  // Ajuster la vue OpenGL lors du redimensionnement
+    glViewport(0, 0, w, h);  // Ajuster la fenêtre d'affichage OpenGL lors du redimensionnement
 }
 
 void miWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Effacer l'écran et le buffer de profondeur
-    glDepthFunc(GL_LESS);
-    glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
+    glDepthFunc(GL_LESS);  // Utiliser la fonction de test de profondeur par défaut
+    glEnable(GL_DEPTH_TEST);  // Assurer que le test de profondeur est activé
+    glShadeModel(GL_SMOOTH);  // Utiliser un modèle d'éclairage lisse pour un rendu plus fluide
 
-    glLoadIdentity();  // Réinitialiser les transformations
+    glLoadIdentity();  // Réinitialiser la matrice de transformation
 
     // Appliquer les transformations de translation
     glTranslatef(translationX, translationY, translationZ);
@@ -35,12 +36,13 @@ void miWidget::paintGL()
     glScalef(scaleX, scaleY, scaleZ);
 
     // Appliquer les transformations de rotation
-    glRotatef(rotate_x, 1.0, 0.0, 0.0);
-    glRotatef(rotate_y, 0.0, 1.0, 0.0);
-    glRotatef(rotate_z, 0.0, 0.0, 1.0);
+    glRotatef(rotate_x, 1.0, 0.0, 0.0);  // Rotation autour de l'axe X
+    glRotatef(rotate_y, 0.0, 1.0, 0.0);  // Rotation autour de l'axe Y
+    glRotatef(rotate_z, 0.0, 0.0, 1.0);  // Rotation autour de l'axe Z
 
     // Dessiner un cube avec des couleurs différentes pour chaque face
-    // Front face (multicolored)
+
+    // Face avant (multicolore)
     glBegin(GL_POLYGON);
     glColor3f(1.0, 0.0, 0.0); glVertex3f(0.05, -0.05, -0.05);
     glColor3f(0.0, 1.0, 0.0); glVertex3f(0.05, 0.05, -0.05);
@@ -48,7 +50,7 @@ void miWidget::paintGL()
     glColor3f(1.0, 0.0, 1.0); glVertex3f(-0.05, -0.05, -0.05);
     glEnd();
 
-    // Back face (white)
+    // Face arrière (blanche)
     glBegin(GL_POLYGON);
     glColor3f(1.0, 1.0, 1.0); glVertex3f(0.05, -0.05, 0.05);
     glVertex3f(0.05, 0.05, 0.05);
@@ -56,7 +58,7 @@ void miWidget::paintGL()
     glVertex3f(-0.05, -0.05, 0.05);
     glEnd();
 
-    // Right face (purple)
+    // Face droite (violette)
     glBegin(GL_POLYGON);
     glColor3f(1.0, 0.0, 1.0); glVertex3f(0.05, -0.05, -0.05);
     glVertex3f(0.05, 0.05, -0.05);
@@ -64,7 +66,7 @@ void miWidget::paintGL()
     glVertex3f(0.05, -0.05, 0.05);
     glEnd();
 
-    // Left face (green)
+    // Face gauche (verte)
     glBegin(GL_POLYGON);
     glColor3f(0.0, 1.0, 0.0); glVertex3f(-0.05, -0.05, 0.05);
     glVertex3f(-0.05, 0.05, 0.05);
@@ -72,7 +74,7 @@ void miWidget::paintGL()
     glVertex3f(-0.05, -0.05, -0.05);
     glEnd();
 
-    // Top face (blue)
+    // Face supérieure (bleue)
     glBegin(GL_POLYGON);
     glColor3f(0.0, 0.0, 1.0); glVertex3f(0.05, 0.05, 0.05);
     glVertex3f(0.05, 0.05, -0.05);
@@ -80,7 +82,7 @@ void miWidget::paintGL()
     glVertex3f(-0.05, 0.05, 0.05);
     glEnd();
 
-    // Bottom face (red)
+    // Face inférieure (rouge)
     glBegin(GL_POLYGON);
     glColor3f(1.0, 0.0, 0.0); glVertex3f(0.05, -0.05, -0.05);
     glVertex3f(0.05, -0.05, 0.05);
@@ -92,7 +94,7 @@ void miWidget::paintGL()
     graficarLineas();
 
     glFlush();  // Exécuter les commandes OpenGL
-    this->makeCurrent();
+    this->makeCurrent();  // S'assurer que le contexte est actif
 }
 
 void miWidget::graficarLineas()
@@ -104,56 +106,59 @@ void miWidget::graficarLineas()
     glEnd();
 }
 
+// Méthodes pour définir les translations et mettre à jour le widget
 void miWidget::setTranslationX(float value)
 {
     translationX = value;
-    update();  // Mettre à jour le widget après chaque changement
+    update();  // Redessiner le widget
 }
 
 void miWidget::setTranslationY(float value)
 {
     translationY = value;
-    update();  // Mettre à jour le widget après chaque changement
+    update();  // Redessiner le widget
 }
 
 void miWidget::setTranslationZ(float value)
 {
     translationZ = value;
-    update();  // Mettre à jour le widget après chaque changement
+    update();  // Redessiner le widget
 }
 
+// Méthodes pour définir l'échelle et mettre à jour le widget
 void miWidget::setScaleX(float value)
 {
     scaleX = value;
-    update();  // Mettre à jour le widget après chaque changement
+    update();  // Redessiner le widget
 }
 
 void miWidget::setScaleY(float value)
 {
     scaleY = value;
-    update();  // Mettre à jour le widget après chaque changement
+    update();  // Redessiner le widget
 }
 
 void miWidget::setScaleZ(float value)
 {
     scaleZ = value;
-    update();  // Mettre à jour le widget après chaque changement
+    update();  // Redessiner le widget
 }
 
+// Méthodes pour définir les rotations et mettre à jour le widget
 void miWidget::setrotationX(float value)
 {
     rotate_x = value;
-    update();  // Mettre à jour le widget après chaque changement
+    update();  // Redessiner le widget
 }
 
 void miWidget::setrotationY(float value)
 {
     rotate_y = value;
-    update();  // Mettre à jour le widget après chaque changement
+    update();  // Redessiner le widget
 }
 
 void miWidget::setrotationZ(float value)
 {
     rotate_z = value;
-    update();  // Mettre à jour le widget après chaque changement
+    update();  // Redessiner le widget
 }
